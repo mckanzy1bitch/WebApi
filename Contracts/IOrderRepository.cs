@@ -1,4 +1,5 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ namespace Contracts
 {
     public interface IOrderRepository
     {
-        IEnumerable<Order> GetOrders(Guid warehouseId, bool trackChanges);
-        Order GetOrder(Guid warehouseId, Guid id, bool trackChanges);
+        Task<PagedList<Order>> GetOrderAsync(Guid warehouseId, OrderParameters orderParameters, bool trackChanges);
+        Task<Order> GetOrderAsync(Guid warehouseId, Guid id, bool trackChanges);
         void CreateOrderForWarehouse(Guid warehouseId, Order order);
-        void DeleteOrder(Order order);
+        void Deleteorder(Order order);
+        object GetOrder(Guid warehouseId, Guid id, bool trackChanges);
+        void DeleteOrder(Order? orderForWarehouse);
     }
 }

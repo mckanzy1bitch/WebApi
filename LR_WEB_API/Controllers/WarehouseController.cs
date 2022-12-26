@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using LR_WEB_API.ActionFilters;
 using LR_WEB_API.ModelBinders;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,26 +69,17 @@ namespace LR_WEB_API.Controllers
            _mapper.Map<IEnumerable<WarehouseDto>>(warehouseEntities);
             return Ok(warehouseToReturn);
         }
-
         [HttpPost]
-        public async Task<IActionResult> CreateWarehouse([FromBody] WarehouseForCreationDto warehouse)
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> CreateWarehouse([FromBody] WarehouseForCreationDto
+         warehouse)
         {
-            if (warehouse == null)
-            {
-                _logger.LogError("WarehouseForCreationDto object sent from client is null.");
-            return BadRequest("WarehouseForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the WarehouseForCreationDto object");
-            return UnprocessableEntity(ModelState);
-            }
             var warehouseEntity = _mapper.Map<Warehouse>(warehouse);
             _repository.Warehouse.CreateWarehouse(warehouseEntity);
             await _repository.SaveAsync();
-            var warehouseToReturn = _mapper.Map<WarehouseDto>(warehouseEntity);
+         var warehouseToReturn = _mapper.Map<WarehouseDto>(warehouseEntity);
             return CreatedAtRoute("WarehouseById", new { id = warehouseToReturn.Id },
-           warehouseToReturn);
+            warehouseToReturn);
         }
 
         [HttpPost("collection")]
@@ -113,10 +105,10 @@ namespace LR_WEB_API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateWarehouseExistsAttribute))]
         public async Task<IActionResult> DeleteWarehouse(Guid id)
         {
-           var warehouse = await _repository.Warehouse.GetWarehouseAsync(id, trackChanges:
-           false);
+            var warehouse = HttpContext.Items["warehouse"] as Warehouse;
             if (warehouse == null)
             {
                 _logger.LogInfo($"Warehouse with id: {id} doesn't exist in the database.");
@@ -128,15 +120,13 @@ namespace LR_WEB_API.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateWarehouseExistsAttribute))]
         public async Task<IActionResult> UpdateWarehouse(Guid id, [FromBody]
-        WarehouseForUpdateDto warehouse)
+        WarehouseForUpdateDto
+        warehouse)
         {
-            if (warehouse == null)
-            {
-            _logger.LogError("WarehouseForUpdateDto object sent from client is null.");
-                return BadRequest("WarehouseForUpdateDto object is null");
-            }
-            var warehouseEntity = await _repository.Warehouse.GetWarehouseAsync(id,trackChanges:true);
+            var warehouseEntity = HttpContext.Items["warehouse"] as Warehouse;
             if (warehouseEntity == null)
             {
                 _logger.LogInfo($"Warehouse with id: {id} doesn't exist in the database.");

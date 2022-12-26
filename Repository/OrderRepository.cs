@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.RequestFeatures;
+using System.ComponentModel.Design;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -15,27 +18,42 @@ namespace Repository
         : base(repositoryContext)
         {
         }
-        public IEnumerable<Order> GetAllOrder(bool trackChanges) =>
-        FindAll(trackChanges)
-        .OrderBy(c => c.Goods)
-        .ToList();
-
-        public IEnumerable<Order> GetOrders(Guid warehouseId, bool trackChanges) =>
-        FindByCondition(c => c.WarehouseId.Equals(warehouseId), trackChanges)
-        .OrderBy(c => c.Goods);
-
-        public Order GetOrder(Guid warehouseId, Guid id, bool trackChanges) =>
-        FindByCondition(c => c.WarehouseId.Equals(warehouseId) && c.Id.Equals(id), trackChanges).SingleOrDefault();
-
+        public async Task<PagedList<Order>> GetOrderAsync(Guid portsId, OrderParameters orderParameters, bool trackChanges)
+        {
+            var order = await FindByCondition(e => e.WarehouseId.Equals(portsId),
+            trackChanges)
+            .OrderBy(e => e.Goods)
+            .ToListAsync();
+            return PagedList<Order>
+            .ToPagedList(order, orderParameters.PageNumber,
+            orderParameters.PageSize);
+        }
+        public async Task<Order> GetShipAsync(Guid warehouseId, Guid id, bool trackChanges) =>
+        await FindByCondition(e => e.WarehouseId.Equals(warehouseId) && e.Id.Equals(id), trackChanges)
+            .SingleOrDefaultAsync();
         public void CreateOrderForWarehouse(Guid warehouseId, Order order)
         {
             order.WarehouseId = warehouseId;
             Create(order);
         }
-
-        public void DeleteOrder(Order order)
+        public void Deleteorder(Order order)
         {
             Delete(order);
+        }
+
+        public Task<Order> GetOrderAsync(Guid warehouseId, Guid id, bool trackChanges)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object GetOrder(Guid warehouseId, Guid id, bool trackChanges)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteOrder(Order? orderForWarehouse)
+        {
+            throw new NotImplementedException();
         }
     }
 }
