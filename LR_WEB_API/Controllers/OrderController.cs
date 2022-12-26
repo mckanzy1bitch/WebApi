@@ -18,11 +18,14 @@ namespace LR_WEB_API.Controllers
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-        public OrderController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+        private readonly IDataShaper<OrderDto> _dataShaper;
+        public OrderController(IRepositoryManager repository, ILoggerManager logger,
+ IMapper mapper, IDataShaper<OrderDto> dataShaper)
         {
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
+            _dataShaper = dataShaper;
         }
         [HttpGet]
         public async Task<IActionResult> GetOrderForWarehouse(Guid warehouseId, [FromQuery] OrderParameters orderParameters)

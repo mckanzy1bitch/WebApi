@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Entities.Models;
+using Entities.RequestFeatures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,5 +17,6 @@ namespace Contracts
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);
+        Task<PagedList<Order>> GetOrderAsync(Guid warehouseId, OrderParameters orderParameters, bool trackChanges);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Contracts;
+using Entities.DataTransferObjects;
 using LR_WEB_API.ActionFilters;
 using LR_WEB_API.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog;
+using Repository.DataShaping;
 //using ShopApi.Extensions;
 
 namespace ShopApi;
@@ -23,6 +25,8 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddScoped<IDataShaper<OrderDto>, DataShaper<OrderDto>>();
+        services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
         services.AddScoped<ValidateWarehouseExistsAttribute>();
         services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
         services.AddScoped<ValidateCompanyExistsAttribute>();

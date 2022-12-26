@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Entities.RequestFeatures;
 using System.ComponentModel.Design;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 
 namespace Repository
 {
@@ -17,6 +18,19 @@ namespace Repository
         public OrderRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
         {
+        }
+        public async Task<PagedList<Order>> GetOrdersAsync(Guid warehouseId, OrderParameters orderParameters, bool trackChanges)
+        {
+            var order = await FindByCondition(e => e.WarehouseId.Equals(warehouseId),
+            trackChanges)
+            .FilterOrder()
+            .Search(orderParameters.SearchTerm)
+            .Sort(orderParameters.OrderBy)
+            .OrderBy(e => e.Goods)
+            .ToListAsync();
+            return PagedList<Order>
+            .ToPagedList(order, orderParameters.PageNumber,
+            orderParameters.PageSize);
         }
         public async Task<PagedList<Order>> GetOrderAsync(Guid portsId, OrderParameters orderParameters, bool trackChanges)
         {
@@ -28,7 +42,7 @@ namespace Repository
             .ToPagedList(order, orderParameters.PageNumber,
             orderParameters.PageSize);
         }
-        public async Task<Order> GetShipAsync(Guid warehouseId, Guid id, bool trackChanges) =>
+        public async Task<Order> GetOrderAsync(Guid warehouseId, Guid id, bool trackChanges) =>
         await FindByCondition(e => e.WarehouseId.Equals(warehouseId) && e.Id.Equals(id), trackChanges)
             .SingleOrDefaultAsync();
         public void CreateOrderForWarehouse(Guid warehouseId, Order order)
@@ -41,11 +55,7 @@ namespace Repository
             Delete(order);
         }
 
-        public Task<Order> GetOrderAsync(Guid warehouseId, Guid id, bool trackChanges)
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public object GetOrder(Guid warehouseId, Guid id, bool trackChanges)
         {
             throw new NotImplementedException();
