@@ -66,6 +66,11 @@ namespace LR_WEB_API.Controllers
                 _logger.LogError("OrderForCreationDto object sent from client is null.");
             return BadRequest("OrderForCreationDto object is null");
             }
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the OderForWarehouseDto object");
+                return UnprocessableEntity(ModelState);
+            }
             var warehouse = _repository.Warehouse.GetWarehouse(warehouseId, trackChanges: false);
             if (warehouse == null)
             {
@@ -112,6 +117,11 @@ namespace LR_WEB_API.Controllers
                 _logger.LogError("OrderForUpdateDto object sent from client is null.");
             return BadRequest("OrderForUpdateDto object is null");
             }
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the OrderForUpdateDto object");
+                return UnprocessableEntity(ModelState);
+            }
             var warehouse = _repository.Warehouse.GetWarehouse(warehouseId, trackChanges: false);
             if (warehouse == null)
             {
@@ -153,7 +163,13 @@ namespace LR_WEB_API.Controllers
             return NotFound();
             }
             var orderToPatch = _mapper.Map<OrderForUpdateDto>(orderEntity);
-            patchDoc.ApplyTo(orderToPatch);
+            patchDoc.ApplyTo(orderToPatch, ModelState);
+            TryValidateModel(orderToPatch);
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the patch document");
+                return UnprocessableEntity(ModelState);
+            }
             _mapper.Map(orderToPatch, orderEntity);
             _repository.Save();
             return NoContent();

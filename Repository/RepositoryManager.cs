@@ -63,5 +63,10 @@ namespace Repository
 
 
         public void Save() => _repositoryContext.SaveChanges();
+
+        public Task SaveAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

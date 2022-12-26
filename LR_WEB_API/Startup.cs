@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using LR_WEB_API.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NLog;
 //using ShopApi.Extensions;
@@ -21,6 +22,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
         services.ConfigureCors();
         services.ConfigureIISIntegration();
         services.ConfigureLoggerService();
@@ -36,6 +41,7 @@ public class Startup
             config.ReturnHttpNotAcceptable = true;
 
         })
+
         .AddXmlDataContractSerializerFormatters()
         .AddCustomCSVFormatter()
         .AddNewtonsoftJson();
