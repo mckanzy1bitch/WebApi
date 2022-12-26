@@ -13,7 +13,7 @@ namespace LR_WEB_API.Controllers
             _repository = repository;
         }
 
- [HttpGet]
+        [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             

@@ -28,6 +28,7 @@ namespace LR_WEB_API.Controllers
             _dataShaper = dataShaper;
         }
         [HttpGet]
+        [HttpHead]
         public async Task<IActionResult> GetOrderForWarehouse(Guid warehouseId, [FromQuery] OrderParameters orderParameters)
         {
             var warehouse = await _repository.Warehouse.GetWarehouseAsync(warehouseId, trackChanges: false);
