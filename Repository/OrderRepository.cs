@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
+    public class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
-        public CompanyRepository(RepositoryContext repositoryContext)
+        public OrderRepository(RepositoryContext repositoryContext)
         : base(repositoryContext)
         {
         }
-        public IEnumerable<Company> GetAllCompanies(bool trackChanges) =>
-        FindAll(trackChanges)
-        .OrderBy(c => c.Name)
+        public IEnumerable<Order> GetAllOrder(bool trackChanges) =>
+       FindAll(trackChanges)
+        .OrderBy(c => c.Goods)
         .ToList();
     }
 }
