@@ -20,7 +20,7 @@ namespace Entities
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new WarehousesConfiguration());
-            modelBuilder.ApplyConfiguration(new OrdersConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
         }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Employee> Employees { get; set; }

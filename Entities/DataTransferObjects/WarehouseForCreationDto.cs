@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entities.DataTransferObjects
 {
-    public class WarehouseDto
+    public class WarehouseForCreationDto
     {
-        public Guid Id { get; set; }
         public string GoodName { get; set; }
         public double Price { get; set; }
         public int Count { get; set; }
+        //public IEnumerable<OrderForCreationDto> Order { get; set; }
+
     }
 }
