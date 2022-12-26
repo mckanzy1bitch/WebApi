@@ -20,8 +20,7 @@ namespace Repository
         .OrderBy(e => e.Name);
 
         public Employee GetEmployee(Guid companyId, Guid id, bool trackChanges) =>
-        FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id),
-        trackChanges).SingleOrDefault();
+        FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id),trackChanges).SingleOrDefault();
 
         public void CreateEmployeeForCompany(Guid companyId, Employee employee)
         {
@@ -29,6 +28,10 @@ namespace Repository
             Create(employee);
         }
 
+        public void DeleteEmployee(Employee employee)
+        {
+            Delete(employee);
+        }
 
     }
 }

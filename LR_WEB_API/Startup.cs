@@ -30,13 +30,15 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddAutoMapper(typeof(Startup));
-        services.AddControllers(config => 
+        services.AddControllers(config =>
         {
             config.RespectBrowserAcceptHeader = true;
             config.ReturnHttpNotAcceptable = true;
 
-        }).AddXmlDataContractSerializerFormatters()
-        .AddCustomCSVFormatter(); 
+        })
+        .AddXmlDataContractSerializerFormatters()
+        .AddCustomCSVFormatter()
+        .AddNewtonsoftJson();
 
 
     }

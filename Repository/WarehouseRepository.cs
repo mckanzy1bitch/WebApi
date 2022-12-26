@@ -26,6 +26,11 @@ namespace Repository
         public void CreateWarehouse(Warehouse warehouse) => Create(warehouse);
         public IEnumerable<Warehouse> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
         FindByCondition(x => ids.Contains(x.Id), trackChanges).ToList();
+
+        public void DeleteWarehouse(Warehouse warehouse)
+        {
+            Delete(warehouse);
+        }
     }
 
 }

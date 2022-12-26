@@ -32,5 +32,10 @@ namespace Repository
             order.WarehouseId = warehouseId;
             Create(order);
         }
+
+        public void DeleteOrder(Order order)
+        {
+            Delete(order);
+        }
     }
 }
