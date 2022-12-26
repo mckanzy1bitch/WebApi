@@ -7,7 +7,7 @@ using System;
 
 namespace LR_WEB_API.Controllers
 {
-    [Route("api/orders")]
+    [Route("api/warehouses/{warehouseId}/orders")]
     public class OrderController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
@@ -20,16 +20,39 @@ namespace LR_WEB_API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GetOrder()
+        public IActionResult GetOrderForWarehouse(Guid warehouseId)
         {
+            var warehouse = _repository.Warehouse.GetWarehouse(warehouseId, trackChanges: false);
+            if (warehouse == null)
+            {
+                _logger.LogInfo($"Warehouse with id: {warehouseId} doesn't exist in the database.");
+            return NotFound();
+            }
            
-            
-                var order = _repository.Order.GetAllOrder(trackChanges:false);
-                var orderDto = _mapper.Map<IEnumerable<OrderDto>>(order);
-                return Ok(orderDto);
+            var orderFromDb = _repository.Order.GetOrders(warehouseId,trackChanges: false);
+            var orderDto = _mapper.Map<IEnumerable<OrderDto>>(orderFromDb);
+            return Ok(orderDto);
+
            
-           
-            
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetOrderForWarehouse(Guid warehouseId, Guid id)
+        {
+            var warehouse = _repository.Warehouse.GetWarehouse(warehouseId, trackChanges: false);
+            if (warehouse == null)
+            {
+                _logger.LogInfo($"Warehouse with id: {warehouseId} doesn't exist in the database.");
+                return NotFound();
+            }
+            var orderDb = _repository.Order.GetOrder(warehouseId, id, trackChanges: false);
+            if (orderDb == null)
+            {
+                _logger.LogInfo($"Order with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            var order = _mapper.Map<OrderDto>(orderDb);
+            return Ok(order);
         }
     }
 }

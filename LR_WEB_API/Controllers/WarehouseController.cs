@@ -25,10 +25,26 @@ namespace LR_WEB_API.Controllers
         public IActionResult GetWarehouse()
         {
             
-                var warehouse = _repository.Warehouse.GetAllWarehouse(trackChanges:false);
-                var warehouseDto = _mapper.Map<IEnumerable<WarehouseDto>>(warehouse);
-                return Ok(warehouseDto);
+                var warehouses = _repository.Warehouse.GetAllWarehouse(trackChanges:false);
+                var warehousesDto = _mapper.Map<IEnumerable<WarehouseDto>>(warehouses);
+                return Ok(warehousesDto);
            
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetWarehouse(Guid id)
+        {
+            var warehouse = _repository.Warehouse.GetWarehouse(id, trackChanges: false);
+            if (warehouse == null)
+            {
+                _logger.LogInfo($"Warehouse with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+            else
+            {
+                var warehouseDto = _mapper.Map<WarehouseDto>(warehouse);
+                return Ok(warehouseDto);
+            }
         }
     }
 }
