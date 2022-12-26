@@ -4,6 +4,7 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using LR_WEB_API.ActionFilters;
 using LR_WEB_API.ModelBinders;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,7 +25,7 @@ namespace LR_WEB_API.Controllers
             _mapper = mapper;
 
         }
-        [HttpGet]
+        [HttpGet(Name = "GetWarehouse"), Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetWarehouse()
         {
             var warehouse = await _repository.Warehouse.GetAllWarehouseAsync(trackChanges : false);

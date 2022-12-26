@@ -10,6 +10,7 @@ public class MappingProfile : Profile
         CreateMap<Employee, EmployeeDto>();
         CreateMap<Order, OrderDto>();
         CreateMap<Warehouse, WarehouseDto>();
+        CreateMap<UserForRegistrationDto, User>();
 
         CreateMap<CompanyForCreationDto, Company>();
 

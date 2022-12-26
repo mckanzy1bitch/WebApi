@@ -4,6 +4,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LRWEBAPI.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20221220193031_InitialData")]
+    partial class InitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,15 +320,15 @@ namespace LRWEBAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "293a39d5-fe71-449a-97bb-e7e53dd1296f",
-                            ConcurrencyStamp = "c9b7b5e3-3990-4a7f-a505-d577c496c31a",
+                            Id = "73cb0ed2-1d5c-430e-954d-517c8770f34a",
+                            ConcurrencyStamp = "3432a4c5-72c4-431c-bba6-2c1d1b4ddf58",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "1536d00e-9fe6-43ed-ae6a-976b0031aec4",
-                            ConcurrencyStamp = "87ed08ab-6ec0-478e-9fb4-fb066085cf58",
+                            Id = "cf82b956-7848-42db-9b80-33be46fe67b0",
+                            ConcurrencyStamp = "cba37443-6d26-4634-9c0d-f276b261388c",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
